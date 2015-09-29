@@ -1,10 +1,8 @@
 #ifndef CHAFF_FINDER_H
 #define CHAFF_FINDER_H
 
-#include <algorithm>
 #include <limits>
 #include <queue>
-#include <vector>
 
 namespace Chaff
 {
@@ -19,7 +17,7 @@ namespace Chaff
 
     public:
       Ranking() {}
-      Ranking(const T& i, const S& r): mThing(i), mScore(r) {}
+      Ranking(const T& t, const S& s): mThing(t), mScore(s) {}
 
       const T& thing() const {return mThing;}
       const S& score() const {return mScore;}
