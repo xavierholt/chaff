@@ -38,48 +38,37 @@ int main() {
   }
 
   NS qt = 0;
-  NS ht = 0;
   NS st = 0;
 
   int qf = 0;
-  int hf = 0;
   int sf = 0;
 
   for(int i = 0; i < REPS; ++i) {
     std::random_shuffle(data, data + DATA);
 
     std::vector<int> qd;
-    std::vector<int> hd;
     std::vector<int> sd;
     
     qt += bench([&]() {
-      auto q = Chaff::MinFinder<int, int, true>::byCount(FIND);
-      for(int i = 0; i < DATA; ++i) q.push(data[i], data[i]);
+      auto q = Chaff::MaxFinder<int, int>::byCount(FIND);
+      for(int i = 0; i < DATA; ++i) q.sow(data[i], data[i]);
       qd = q.reap();
-    });
-
-    ht += bench([&]() {
-      auto h = Chaff::MinFinder<int, int, false>::byCount(FIND);
-      for(int i = 0; i < DATA; ++i) h.push(data[i], data[i]);
-      hd = h.reap();
     });
 
     st += bench([&]() {
       std::sort(data, data + DATA);
-      sd = std::vector<int>(data, data + FIND);
+      std::reverse(data + DATA - FIND, data + DATA);
+      sd = std::vector<int>(data + DATA - FIND, data + DATA);
     });
 
     // print('q', qd);
-    // print('h', hd);
     // print('s', sd);
 
     qf += (qd == sd);
-    hf += (hd == sd);
     sf += 1;
   }
 
   printf("std::priority_queue %10.6f (%i / %i)\n", double(qt) / NANO, qf, sf);
-  printf("Chaff::Heap         %10.6f (%i / %i)\n", double(ht) / NANO, hf, sf);
   printf("std::sort           %10.6f (%i / %i)\n", double(st) / NANO, sf, sf);
 
   return 0;

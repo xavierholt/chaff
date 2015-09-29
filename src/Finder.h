@@ -1,8 +1,6 @@
 #ifndef CHAFF_FINDER_H
 #define CHAFF_FINDER_H
 
-#include "Heap.h"
-
 #include <algorithm>
 #include <limits>
 #include <queue>
@@ -10,94 +8,91 @@
 
 namespace Chaff
 {
-  template <class T, class R, class C = std::less<R>, bool Q = true>
+  template <class T, class S, class C = std::less<S> >
   class Finder {
   protected:
-    const static C COMPARE;
-
     struct Ranking {
     protected:
-      T mItem;
-      R mRank;
+      T mThing;
+      S mScore;
+      C mCompare;
 
     public:
       Ranking() {}
-      Ranking(const T& i, const R& r): mItem(i), mRank(r) {}
+      Ranking(const T& i, const S& r): mThing(i), mScore(r) {}
 
-      const T& item() const {return mItem;}
-      const R& rank() const {return mRank;}
+      const T& thing() const {return mThing;}
+      const S& score() const {return mScore;}
 
       bool operator < (const Ranking& other) const {
-        return COMPARE(rank(), other.rank());
+        return mCompare(score(), other.score());
       }
     };
 
-    typedef typename std::conditional<Q,
-      std::priority_queue<Ranking>,
-      Chaff::Heap<Ranking>
-    >::type H;
+    typedef typename std::priority_queue<Ranking> Heap;
 
   protected:
-    H   mHeap;
-    int mMaxCount;
-    R   mRank;
-    R   mTopRank;
+    Heap mHeap;
+    int  mMaxCount;
+    S    mTopScore;
+    S    mMaxScore;
+    C    mCompare;
   
   public:
-    Finder(int count, const R& rank): mHeap() {
+    Finder(int count, const S& score): mHeap() {
       mMaxCount = count;
-      mTopRank  = rank;
-      mRank     = rank;
+      mTopScore = score;
+      mMaxScore = score;
     }
 
     void clear() {
-      mHeap = H();
-      mRank = mTopRank;
-    }
-
-    void push(const T& item, const R& rank) {
-      if(COMPARE(rank, mRank)) {
-        mHeap.push(Ranking(item, rank));
-        if(mHeap.size() > mMaxCount) {
-          mHeap.pop();
-          mRank = mHeap.top().rank();
-        }
-      }
-    }
-
-    const R& rank() const {
-      return mRank;
+      mHeap     = Heap();
+      mTopScore = mMaxScore;
     }
 
     std::vector<T> reap() {
       std::vector<T> results(mHeap.size());
     
       for(int i = mHeap.size() - 1; i >= 0; --i) {
-        results[i] = mHeap.top().item();
+        results[i] = mHeap.top().thing();
         mHeap.pop();
       }
     
       clear();
       return results;
     }
+
+    const S& score() const {
+      return mTopScore;
+    }
+
+    void sow(const T& thing, const S& score) {
+      if(mCompare(score, mTopScore)) {
+        mHeap.push(Ranking(thing, score));
+        if(mHeap.size() > mMaxCount) {
+          mHeap.pop();
+          mTopScore = mHeap.top().score();
+        }
+      }
+    }
   };
 
-  template <class T, class R, bool  Q = true>
-  class MaxFinder: public Finder<T, R, std::greater<R>, Q> {
+  template <class T, class S>
+  class MaxFinder: public Finder<T, S, std::greater<S> > {
   public:
-    static MaxFinder byCount(int count)     {return MaxFinder(count, std::numeric_limits<R>::min());}
-    static MaxFinder byScore(const R& rank) {return MaxFinder(std::numeric_limits<int>::max(), rank);}
+    static MaxFinder byCount(int count)      {return MaxFinder(count, std::numeric_limits<S>::min());}
+    static MaxFinder byScore(const S& score) {return MaxFinder(std::numeric_limits<int>::max(), score);}
   public:
-    MaxFinder(int count, const R& rank): Finder<T, R, std::greater<R>, Q>(count, rank) {}
+    MaxFinder(int count, const S& score): Finder<T, S, std::greater<S> >(count, score) {}
   };
 
-  template <class T, class R, bool  Q = true>
-  class MinFinder: public Finder<T, R, std::less<R>, Q> {
+  template <class T, class S>
+  class MinFinder: public Finder<T, S, std::less<S> > {
   public:
-    static MinFinder byCount(int count)     {return MinFinder(count, std::numeric_limits<R>::max());}
-    static MinFinder byScore(const R& rank) {return MinFinder(std::numeric_limits<int>::max(), rank);}
+    static MinFinder byCount(int count)      {return MinFinder(count, std::numeric_limits<S>::max());}
+    static MinFinder byScore(const S& score) {return MinFinder(std::numeric_limits<int>::max(), score);}
   public:
-    MinFinder(int count, const R& rank): Finder<T, R, std::less<R>, Q>(count, rank) {}
+    MinFinder(int count, const S& score): Finder<T, S, std::less<S> >(count, score) {}
   };
 }
 
