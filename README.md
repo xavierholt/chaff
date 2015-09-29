@@ -1,8 +1,8 @@
 # Chaff
 
-So you have some things.  They're not in any particular order. But you
-want to find the best three of them.  You don't want to sort them.  So
-what can you do?  This is where Chaff is helpful.
+So  you have some things.   They're not in any particular order.   You
+don't want to sort them.  But you want to find the best three of them.
+So what can you do?  This is where Chaff is helpful.
 
 ```C++
 // Full code in tst/example.cpp!
@@ -13,7 +13,7 @@ for(int& i: things) {
 
 auto finder = Chaff::MaxFinder<int,int>::byCount(3);
 for(int i: things) {
-  finder.push(i, i);
+  finder.sow(i, i);
 }
 
 std::cout << "The best three things are:\n";
@@ -22,7 +22,6 @@ for(int i: finder.reap()) {
 }
 
 std::cout << "Aren't they amazing?\n";
-return 0;
 ```
 
 

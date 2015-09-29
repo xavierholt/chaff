@@ -12,7 +12,7 @@ int main() {
 
   auto finder = Chaff::MaxFinder<int,int>::byCount(3);
   for(int i: things) {
-    finder.push(i, i);
+    finder.sow(i, i);
   }
 
   std::cout << "The best three things are:\n";
