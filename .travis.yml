@@ -1,5 +1,5 @@
 sudo: false
-language: C++
+language: cpp
 compiler:
  - clang
  - gcc
@@ -8,6 +8,8 @@ install:
 - if [ "$CXX" = "g++" ]; then export CXX="g++-4.8"; fi
 addons:
   apt:
+    sources:
+    - ubuntu-toolchain-r-test
     packages:
     - g++-4.8
     - clang
