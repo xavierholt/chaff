@@ -25,51 +25,71 @@ void print(char id, const std::vector<int>& data) {
   printf("\n");
 }
 
-int main() {
-  srand(time(NULL));
+int main(int argc, char* argv[]) {
+  if(argc < 4 || argc > 5) {
+    printf("USAGE: %s data-count find-count test-count [seed]\n", argv[0]);
+    exit(1);
+  }
 
-  const int REPS = 100;
-  const int DATA = 1000000;
-  const int FIND = 2000;
+  const int DATA = std::stoi(argv[1]);
+  const int FIND = std::stoi(argv[2]);
+  const int REPS = std::stoi(argv[3]);
+  const int SEED = (argc == 5)? std::stoi(argv[4]): time(nullptr);
+  printf("%s %i %i %i %i\n", argv[0], DATA, FIND, REPS, SEED);
 
+  srand(SEED);
   int* data = new int[DATA];
   for(int i = 0; i < DATA ; ++i) {
     data[i] = i;
   }
 
-  NS qt = 0;
-  NS st = 0;
+  NS  cmin_time  = 0;
+  NS  cmax_time  = 0;
+  NS  sort_time  = 0;
 
-  int qf = 0;
-  int sf = 0;
+  int cmin_found = 0;
+  int cmax_found = 0;
 
   for(int i = 0; i < REPS; ++i) {
     std::random_shuffle(data, data + DATA);
 
-    std::vector<int> qd;
-    std::vector<int> sd;
+    std::vector<int> cmin_data;
+    std::vector<int> cmax_data;
+    std::vector<int> smin_data;
+    std::vector<int> smax_data;
     
-    qt += bench([&]() {
+    cmin_time += bench([&]() {
+      auto q = Chaff::MinFinder<int, int>::byCount(FIND);
+      for(int i = 0; i < DATA; ++i) q.sow(data[i], data[i]);
+      cmin_data = q.reap();
+    });
+
+    cmax_time += bench([&]() {
       auto q = Chaff::MaxFinder<int, int>::byCount(FIND);
       for(int i = 0; i < DATA; ++i) q.sow(data[i], data[i]);
-      qd = q.reap();
+      cmax_data = q.reap();
     });
 
-    st += bench([&]() {
+    sort_time += bench([&]() {
+      int n = std::min(DATA, FIND);
       std::sort(data, data + DATA);
-      std::reverse(data + DATA - FIND, data + DATA);
-      sd = std::vector<int>(data + DATA - FIND, data + DATA);
+      smin_data = std::vector<int>(data, data + n);
+      std::reverse(data + DATA - n, data + DATA);
+      smax_data = std::vector<int>(data + DATA - n, data + DATA);
     });
 
-    // print('q', qd);
-    // print('s', sd);
-
-    qf += (qd == sd);
-    sf += 1;
+    cmin_found += (cmin_data == smin_data);
+    cmax_found += (cmax_data == smax_data);
   }
 
-  printf("std::priority_queue %10.6f (%i / %i)\n", double(qt) / NANO, qf, sf);
-  printf("std::sort           %10.6f (%i / %i)\n", double(st) / NANO, sf, sf);
+  printf("Chaff::MinFinder %10.6fs (%i / %i)\n", double(cmin_time) / NANO, cmin_found, REPS);
+  printf("Chaff::MaxFinder %10.6fs (%i / %i)\n", double(cmax_time) / NANO, cmax_found, REPS);
+  printf("Full Sort        %10.6fs (%i / %i)\n", double(sort_time) / NANO, REPS,       REPS);
+
+  if(cmin_found != REPS || cmax_found != REPS) {
+    printf("Result mismatch!\n");
+    exit(2);
+  }
 
   return 0;
 }
