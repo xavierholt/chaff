@@ -1,10 +1,11 @@
 FLAGS = -std=c++11 -O3 -Wall -Werror
+LIBS  = -lrt
 
 all: example.out benchmark.out
 example.out: tst/example.cpp src/Finder.h
-	${CXX} $(FLAGS) -o $@ $<
+	${CXX} $(FLAGS) -o $@ $< $(LIBS)
 benchmark.out: tst/benchmark.cpp src/Finder.h
-	${CXX} $(FLAGS) -o $@ $<
+	${CXX} $(FLAGS) -o $@ $< $(LIBS)
 test: all
 	./example.out
 	./benchmark.out 1000000      1 10
