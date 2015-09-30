@@ -2,7 +2,7 @@
 
 So  you have some things.   They're not in any particular order.   You
 don't want to sort them.  But you want to find the best three of them.
-So what can you do?  This is where Chaff is helpful.
+So what can you do?
 
 ```C++
 // Full code in tst/example.cpp!
