@@ -1,5 +1,5 @@
-#ifndef CHAFF_FINDER_H
-#define CHAFF_FINDER_H
+#ifndef CHAFF_H
+#define CHAFF_H
 
 #include <limits>
 #include <queue>

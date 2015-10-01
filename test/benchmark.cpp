@@ -1,4 +1,4 @@
-#include "../src/Finder.h"
+#include "../Chaff.h"
 
 #include <algorithm>
 #include <cstdio>
@@ -82,14 +82,15 @@ int main(int argc, char* argv[]) {
     cmax_found += (cmax_data == smax_data);
   }
 
-  printf("Chaff::MinFinder %10.6fs (%i / %i)\n", double(cmin_time) / NANO, cmin_found, REPS);
-  printf("Chaff::MaxFinder %10.6fs (%i / %i)\n", double(cmax_time) / NANO, cmax_found, REPS);
-  printf("Full Sort        %10.6fs (%i / %i)\n", double(sort_time) / NANO, REPS,       REPS);
+  printf("MinFinder %10.6fs (%i / %i)\n", double(cmin_time) / NANO, cmin_found, REPS);
+  printf("MaxFinder %10.6fs (%i / %i)\n", double(cmax_time) / NANO, cmax_found, REPS);
+  printf("Full Sort %10.6fs (%i / %i)\n", double(sort_time) / NANO, REPS,       REPS);
 
   if(cmin_found != REPS || cmax_found != REPS) {
-    printf("Result mismatch!\n");
+    printf("Result mismatch!\n\n");
     exit(2);
   }
 
+  printf("\n");
   return 0;
 }

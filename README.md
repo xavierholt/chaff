@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/xavierholt/chaff.svg)](https://travis-ci.org/xavierholt/chaff)
+
 # Chaff
 
 So  you have some things.   They're not in any particular order.   You
@@ -5,7 +7,7 @@ don't want to sort them.  But you want to find the best three of them.
 So what can you do?
 
 ```C++
-// Full code in tst/example.cpp!
+// Full code in test/example.cpp!
 std::vector<int> things(1000000);
 for(int& i: things) {
   i = rand();
@@ -61,7 +63,7 @@ Once you have a Finder, there are a few things you can do with it:
 
  - `void MyFinder::sow(const T& thing, const S& score)`  
    If `thing`  (with score `score`)  could possibly be a member of the
-   result set, add it.  Otherwise ignore it.
+   result set, add it.
 
  - `std::vector<T> MyFinder::reap()`  
    Collect the results,  ordered by bestness.   This is a  destructive

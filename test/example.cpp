@@ -1,4 +1,4 @@
-#include "../src/Finder.h"
+#include "../Chaff.h"
 
 #include <cstdlib>
 #include <iostream>
@@ -20,6 +20,6 @@ int main() {
     std::cout << " - " << i << '\n';
   }
 
-  std::cout << "Aren't they amazing?\n";
+  std::cout << "Aren't they amazing?\n\n";
   return 0;
 }
