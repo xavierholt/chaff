@@ -48,6 +48,10 @@ namespace Chaff
       mTopScore = mMaxScore;
     }
 
+    int count() const {
+      return mHeap.size();
+    }
+
     std::vector<T> reap() {
       std::vector<T> results(mHeap.size());
     
