@@ -74,8 +74,13 @@ namespace Chaff
     void sow(const T& thing, const S& score) {
       if(mCompare(score, mTopScore)) {
         mHeap.push(Ranking(thing, score));
-        if(mHeap.size() > mMaxCount) {
+        Size size = mHeap.size();
+
+        if(size > mMaxCount) {
           mHeap.pop();
+        }
+
+        if(size >= mMaxCount) {
           mTopScore = mHeap.top().score();
         }
       }
