@@ -32,10 +32,10 @@ int main(int argc, char* argv[]) {
     exit(1);
   }
 
-  const int DATA = std::stoi(argv[1]);
-  const int FIND = std::stoi(argv[2]);
-  const int REPS = std::stoi(argv[3]);
-  const int SEED = (argc == 5)? std::stoi(argv[4]): time(nullptr);
+  const int DATA = std::atoi(argv[1]);
+  const int FIND = std::atoi(argv[2]);
+  const int REPS = std::atoi(argv[3]);
+  const int SEED = (argc == 5)? std::atoi(argv[4]): time(nullptr);
   printf("%s %i %i %i %i\n", argv[0], DATA, FIND, REPS, SEED);
 
   srand(SEED);
@@ -58,7 +58,7 @@ int main(int argc, char* argv[]) {
     std::vector<int> cmax_data;
     std::vector<int> smin_data;
     std::vector<int> smax_data;
-    
+
     cmin_time += bench([&]() {
       auto q = Chaff::MinFinder<int, int>::byCount(FIND);
       for(int i = 0; i < DATA; ++i) q.sow(data[i], data[i]);

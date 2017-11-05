@@ -1,5 +1,5 @@
 FLAGS = -std=c++11 -O3 -Wall -Werror
-LIBS  = -lrt
+# LIBS  = -lrt
 
 all: example.out benchmark.out
 example.out: test/example.cpp Chaff.h
