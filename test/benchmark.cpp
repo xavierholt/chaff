@@ -25,7 +25,7 @@ int main(int argc, char* argv[]) {
   const int DATA = std::atoi(argv[1]);
   const int FIND = std::atoi(argv[2]);
   const int REPS = std::atoi(argv[3]);
-  const int SEED = (argc == 5)? std::atoi(argv[4]): time(nullptr);
+  const int SEED = (argc == 5)? std::atoi(argv[4]): time(0);
   printf("%s %i %i %i %i\n", argv[0], DATA, FIND, REPS, SEED);
 
   srand(SEED);
