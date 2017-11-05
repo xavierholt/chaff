@@ -16,7 +16,6 @@ namespace Chaff
       C mCompare;
 
     public:
-      Ranking() {}
       Ranking(const T& t, const S& s): mThing(t), mScore(s) {}
 
       const T& thing() const {return mThing;}
