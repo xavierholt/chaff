@@ -1,6 +1,10 @@
 #ifndef MOKA_MUST_H
 #define MOKA_MUST_H
 
+#include "util.h"
+
+#include <exception>
+#include <functional>
 #include <sstream>
 #include <string>
 
