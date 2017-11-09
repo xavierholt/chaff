@@ -30,6 +30,8 @@ namespace Chaff
   public:
     typedef typename std::priority_queue<Ranking> Heap;
     typedef typename Heap::size_type Size;
+    typedef T Thing;
+    typedef S Score;
 
   protected:
     Heap mHeap;
@@ -104,12 +106,14 @@ namespace Chaff
   class MaxFinder: public Finder<T, S, std::greater<S> > {
   public:
     typedef typename Finder<T, S, std::greater<S> >::Size Size;
+    typedef T Thing;
+    typedef S Score;
 
     static Size defaultCount() {return std::numeric_limits<Size>::max();}
     static S    defaultScore() {return std::numeric_limits<S>::min();}
 
-    static MaxFinder byCount(Size count)     {return MaxFinder(count, std::numeric_limits<S>::min());}
-    static MaxFinder byScore(const S& score) {return MaxFinder(std::numeric_limits<Size>::max(), score);}
+    static MaxFinder byCount(Size count)     {return MaxFinder(count, defaultScore());}
+    static MaxFinder byScore(const S& score) {return MaxFinder(defaultCount(), score);}
   public:
     MaxFinder(): Finder<T, S, std::greater<S> >(defaultCount(), defaultScore()) {}
     MaxFinder(Size count, const S& score): Finder<T, S, std::greater<S> >(count, score) {}
@@ -119,6 +123,8 @@ namespace Chaff
   class MinFinder: public Finder<T, S, std::less<S> > {
   public:
     typedef typename Finder<T, S, std::greater<S> >::Size Size;
+    typedef T Thing;
+    typedef S Score;
 
     static Size defaultCount() {return std::numeric_limits<Size>::max();}
     static S    defaultScore() {return std::numeric_limits<S>::max();}
